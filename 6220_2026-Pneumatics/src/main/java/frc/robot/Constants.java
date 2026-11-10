@@ -6,9 +6,20 @@ package frc.robot;
 
 public final class Constants {
 
-  /** Pneumatics: CTRE PCM with a digital pressure switch. No analog pressure sensor. */
+  /** Pneumatics: REV Pneumatic Hub (PH) with a digital pressure switch. */
   public static final class PneumaticsConstants {
-    // TODO: set the PCM CAN ID (check Phoenix Tuner). -1 is a placeholder and is not a valid ID.
-    public static final int PCM_CAN_ID = -1;
+    // REV Pneumatic Hub CAN ID. Factory default is 1. TODO: confirm in REV Hardware Client.
+    public static final int PH_CAN_ID = 1;
+
+    // PH solenoid port the valve is plugged into (0-15). TODO: set to the real port.
+    public static final int VALVE_CHANNEL = 0;
+
+    // Analog port 0 on the PH. Only meaningful if a REV analog pressure sensor is plugged in.
+    public static final int PRESSURE_SENSOR_CHANNEL = 0;
+  }
+
+  /** Driver controller. */
+  public static final class OperatorConstants {
+    public static final int DRIVER_CONTROLLER_PORT = 0;
   }
 }

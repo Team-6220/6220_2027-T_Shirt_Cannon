@@ -1,3 +1,5 @@
+> **UPDATE (Nov 2026):** the hardware is a **REV Pneumatic Hub**, not a CTRE PCM. The code now uses `PneumaticHub` and adds a valve on the A/B buttons. See README.md. The CTRE PCM notes below are out of date.
+
 # Handoff: FRC 6220 pneumatics test bench (read this first)
 
 Paste this whole file to Claude on the new computer. It replaces the earlier
