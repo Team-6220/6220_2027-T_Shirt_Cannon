@@ -9,13 +9,12 @@ class PneumaticsSubsystemTest {
 
   @Test
   void noFaultWhenAllClear() {
-    assertFalse(PneumaticsSubsystem.hasCompressorFault(false, false, false));
+    assertFalse(PneumaticsSubsystem.hasCompressorFault(false, false));
   }
 
   @Test
   void eachFaultTripsAlert() {
-    assertTrue(PneumaticsSubsystem.hasCompressorFault(true, false, false));
-    assertTrue(PneumaticsSubsystem.hasCompressorFault(false, true, false));
-    assertTrue(PneumaticsSubsystem.hasCompressorFault(false, false, true));
+    assertTrue(PneumaticsSubsystem.hasCompressorFault(true, false));
+    assertTrue(PneumaticsSubsystem.hasCompressorFault(false, true));
   }
 }
