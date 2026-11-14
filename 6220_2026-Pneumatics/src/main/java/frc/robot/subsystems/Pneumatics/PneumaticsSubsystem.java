@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -38,6 +39,14 @@ public class PneumaticsSubsystem extends SubsystemBase {
           "Pneumatics: valve output disabled (short / over current) - check coil wiring",
           AlertType.kError);
 
+  private final Timer compressorRunTimer = new Timer();
+  private boolean compressorTimedOut = false;
+  private final Alert compressorTimeoutAlert =
+      new Alert(
+          "Pneumatics: compressor ran too long without reaching pressure - check the switch and"
+              + " air leaks. Restart robot code to reset.",
+          AlertType.kError);
+
   private boolean lowPressure = false;
 
   public PneumaticsSubsystem() {
@@ -49,6 +58,8 @@ public class PneumaticsSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+    updateCompressorWatchdog();
+
     // The switch reads true when the system is not full.
     lowPressure = compressor.getPressureSwitchValue();
 
@@ -63,6 +74,7 @@ public class PneumaticsSubsystem extends SubsystemBase {
     SmartDashboard.putBoolean(tableKey + "LowPressure", lowPressure);
     SmartDashboard.putBoolean(tableKey + "CompressorRunning", compressor.isEnabled());
     SmartDashboard.putBoolean(tableKey + "CompressorFault", compressorFault);
+    SmartDashboard.putBoolean(tableKey + "CompressorTimedOut", compressorTimedOut);
     SmartDashboard.putBoolean(tableKey + "ValveOn", valve.get());
     SmartDashboard.putBoolean(tableKey + "ValveFault", valveFault);
     SmartDashboard.putNumber(tableKey + "SolenoidVoltage", ph.getSolenoidsVoltage());
@@ -70,6 +82,22 @@ public class PneumaticsSubsystem extends SubsystemBase {
     SmartDashboard.putNumber(
         tableKey + "PressurePSI (sensor only)",
         ph.getPressure(PneumaticsConstants.PRESSURE_SENSOR_CHANNEL));
+  }
+
+  /** Turns the compressor off if it runs too long without the switch saying "full". */
+  private void updateCompressorWatchdog() {
+    if (compressor.isEnabled()) {
+      compressorRunTimer.start();
+    } else {
+      compressorRunTimer.stop();
+      compressorRunTimer.reset();
+    }
+    if (!compressorTimedOut
+        && compressorRunTimer.hasElapsed(PneumaticsConstants.COMPRESSOR_MAX_RUN_SECONDS)) {
+      compressor.disable();
+      compressorTimedOut = true;
+    }
+    compressorTimeoutAlert.set(compressorTimedOut);
   }
 
   /** True when the pressure switch says the system is not full. */

@@ -16,6 +16,10 @@ public final class Constants {
 
     // Analog port 0 on the PH. Only meaningful if a REV analog pressure sensor is plugged in.
     public static final int PRESSURE_SENSOR_CHANNEL = 0;
+
+    // If the compressor runs this long without the switch saying "full", the code turns it off
+    // (covers a disconnected switch or a big air leak).
+    public static final double COMPRESSOR_MAX_RUN_SECONDS = 60.0;
   }
 
   /** Driver controller. */
