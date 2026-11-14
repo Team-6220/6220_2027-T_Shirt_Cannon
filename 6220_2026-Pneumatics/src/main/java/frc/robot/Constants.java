@@ -9,7 +9,7 @@ public final class Constants {
   /** Pneumatics: REV Pneumatic Hub (PH) with a digital pressure switch. */
   public static final class PneumaticsConstants {
     // REV Pneumatic Hub CAN ID. Factory default is 1. TODO: confirm in REV Hardware Client.
-    public static final int PH_CAN_ID = 1;
+    public static final int PH_CAN_ID = 15;
 
     // PH solenoid port the valve is plugged into (0-15). TODO: set to the real port.
     public static final int VALVE_CHANNEL = 0;
